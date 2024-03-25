@@ -14,4 +14,8 @@ public interface BookingService {
     Booking findById(Long id);
 
     Booking create( String name, Category category, Host host, Integer numRooms);
+
+    void deleteById(Long id);
+
+    Booking update(Long id, String name, Category category, Host host, Integer numRooms);
 }

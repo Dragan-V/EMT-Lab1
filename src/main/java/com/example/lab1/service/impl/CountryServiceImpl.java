@@ -30,4 +30,17 @@ public class CountryServiceImpl implements CountryService {
     public Country create(String name, String continent) {
         return this.countryRepository.save(new Country(name, continent));
     }
+    @Override
+    public void deleteById(Long id) {
+        var country = this.findById(id);
+        this.countryRepository.delete(country);
+    }
+
+    @Override
+    public Country update(Long id, String name, String continent) {
+        var country = this.findById(id);
+        country.setName(name);
+        country.setContinent(continent);
+        return this.countryRepository.save(country);
+    }
 }

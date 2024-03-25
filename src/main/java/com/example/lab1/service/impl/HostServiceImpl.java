@@ -32,4 +32,18 @@ public class HostServiceImpl implements HostService {
     public Host create(String name, String surname, Long country) {
         return this.hostRepository.save(new Host(name, surname, this.countryRepository.findById(country).get()));
     }
+
+    @Override
+    public void deleteById(Long id) {
+        var host = this.findById(id);
+        this.hostRepository.delete(host);
+    }
+    @Override
+    public Host update(Long id, String name, String surname, Long country) {
+        var host = this.findById(id);
+        host.setName(name);
+        host.setSurname(surname);
+        host.setCountry(this.countryRepository.findById(country).get());
+        return this.hostRepository.save(host);
+    }
 }

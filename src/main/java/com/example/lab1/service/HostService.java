@@ -11,4 +11,8 @@ public interface HostService {
 
     Host findById(Long id);
     List<Host> listAll();
+
+    void deleteById(Long id);
+
+    Host update(Long id, String name, String surname, Long countryId);
 }

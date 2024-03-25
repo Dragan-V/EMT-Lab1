@@ -24,7 +24,6 @@ public class HostController {
         if(hostDto == null) {
             return ResponseEntity.notFound().build();
         }
-
         this.hostService.create(hostDto.getName(), hostDto.getSurname(), hostDto.getCountryId());
         return ResponseEntity.ok().build();
     }
@@ -32,4 +31,26 @@ public class HostController {
     public List<Host> listAll() {
         return this.hostService.listAll();
     }
+
+    @PostMapping("/delete-host/{id}")
+    public ResponseEntity<Void> deleteHost(@PathVariable Long id) {
+        if(id == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        this.hostService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/update-host/{id}")
+    public ResponseEntity<Void> updateHost(@PathVariable Long id, @RequestBody HostDto hostDto) {
+        if (id == null || hostDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        this.hostService.update(id, hostDto.getName(), hostDto.getSurname(), hostDto.getCountryId());
+        return ResponseEntity.ok().build();
+    }
+
+
 }

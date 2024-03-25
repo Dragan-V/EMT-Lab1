@@ -48,5 +48,24 @@ public class BookingController {
         return ResponseEntity.ok().build();
     }
 
+    @PostMapping("/delete-booking/{id}")
+    public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
+        if(id == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        this.bookingService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/update-booking/{id}")
+    public ResponseEntity<Void> updateBooking(@PathVariable Long id, @RequestBody BookingDto bookingDto) {
+        if(id == null || bookingDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        this.bookingService.update(id, bookingDto.getName(), bookingDto.getCategory(), bookingDto.getHost(), bookingDto.getNumRooms());
+        return ResponseEntity.ok().build();
+    }
+
 }
 

@@ -33,4 +33,20 @@ public class BookingServiceImpl implements BookingService {
         Booking newBooking = new Booking(name,category,host,numRooms);
         return bookingsRepository.save(newBooking);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        var booking = this.findById(id);
+        bookingsRepository.delete(booking);
+    }
+
+    @Override
+    public Booking update(Long id,String name,Category category,Host host,Integer numRooms){
+        var booking = this.findById(id);
+        booking.setName(name);
+        booking.setCategory(category);
+        booking.setHost(host);
+        booking.setNumRooms(numRooms);
+        return bookingsRepository.save(booking);
+    }
 }

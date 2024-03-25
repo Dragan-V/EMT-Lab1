@@ -34,4 +34,25 @@ public class CountryController {
     public List<Country> getCountries() {
         return this.countryService.listAll();
     }
+
+
+    @PostMapping("/delete-country/{id}")
+    public ResponseEntity<Void> deleteCountry(@PathVariable Long id) {
+        if(id == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        this.countryService.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/update-country/{id}")
+    public ResponseEntity<Void> updateCountry(@PathVariable Long id, @RequestBody CountryDto countryDto) {
+        if(id == null || countryDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        this.countryService.update(id, countryDto.getName(), countryDto.getContinent());
+        return ResponseEntity.ok().build();
+    }
 }
