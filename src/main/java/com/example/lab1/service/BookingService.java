@@ -9,7 +9,9 @@ import java.awt.print.Book;
 import java.util.List;
 
 public interface BookingService {
-    List<Booking> getAllBookings();
+    List<Booking> listAll();
+
+    Booking findById(Long id);
 
     Booking create( String name, Category category, Host host, Integer numRooms);
 }

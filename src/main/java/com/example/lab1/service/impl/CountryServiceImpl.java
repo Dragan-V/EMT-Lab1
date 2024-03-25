@@ -1,6 +1,7 @@
 package com.example.lab1.service.impl;
 
 import com.example.lab1.model.Country;
+import com.example.lab1.model.exceptions.CountryNotFoundException;
 import com.example.lab1.repository.CountryRepository;
 import com.example.lab1.service.CountryService;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,11 @@ public class CountryServiceImpl implements CountryService {
     @Override
     public List<Country> listAll() {
         return this.countryRepository.findAll();
+    }
+
+    @Override
+    public Country findById(Long id) {
+        return this.countryRepository.findById(id).orElseThrow(CountryNotFoundException::new);
     }
 
     @Override

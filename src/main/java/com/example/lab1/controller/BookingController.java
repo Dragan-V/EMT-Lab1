@@ -3,7 +3,9 @@ package com.example.lab1.controller;
 import com.example.lab1.model.Booking;
 import com.example.lab1.model.Category;
 import com.example.lab1.model.Host;
+import com.example.lab1.model.dto.BookingDto;
 import com.example.lab1.service.BookingService;
+import com.example.lab1.service.HostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,29 +14,38 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/bookings")
+@RequestMapping("/booking")
 public class BookingController {
 
     private final BookingService bookingService;
+    private final HostService hostService;
 
     @Autowired
-    public BookingController(BookingService bookingService) {
+    public BookingController(BookingService bookingService, HostService hostService) {
         this.bookingService = bookingService;
+        this.hostService = hostService;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Booking>> getAllBookings() {
-        List<Booking> bookings = bookingService.getAllBookings();
+    @GetMapping("/bookings")
+    public ResponseEntity<List<Booking>> listAll() {
+        List<Booking> bookings = bookingService.listAll();
         return ResponseEntity.ok(bookings);
     }
 
-    @PostMapping
-    public ResponseEntity<Booking> createBooking(@RequestParam String name,
-                                                 @RequestParam Category category,
-                                                 @RequestParam Host host,
-                                                 @RequestParam Integer numRooms) {
-        Booking createdBooking = bookingService.create(name, category, host, numRooms);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdBooking);
+
+
+    @PostMapping("/add-booking")
+    public ResponseEntity<Void> addBooking(@RequestBody BookingDto bookingDto) {
+        if(bookingDto == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        if(hostService.findById(bookingDto.getHost().getId()) == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        this.bookingService.create(bookingDto.getName(), bookingDto.getCategory(), bookingDto.getHost(), bookingDto.getNumRooms());
+        return ResponseEntity.ok().build();
     }
 
 }

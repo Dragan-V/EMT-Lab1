@@ -7,8 +7,4 @@ public class CountryDto {
      String continent;
      String name;
 
-    public CountryDto(String continent, String name) {
-        this.continent = continent;
-        this.name = name;
-    }
 }

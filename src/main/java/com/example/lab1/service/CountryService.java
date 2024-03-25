@@ -8,4 +8,6 @@ public interface CountryService {
     Country create(String name,String continent);
 
     List<Country> listAll();
+
+    Country findById(Long id);
 }
