@@ -18,4 +18,8 @@ public interface BookingService {
     void deleteById(Long id);
 
     Booking update(Long id, String name, Category category, Host host, Integer numRooms);
+
+     void onBookingCreated();
+     void onBookingEdited();
+     void onBookingDeleted();
 }

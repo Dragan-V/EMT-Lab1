@@ -49,4 +49,16 @@ public class BookingServiceImpl implements BookingService {
         booking.setNumRooms(numRooms);
         return bookingsRepository.save(booking);
     }
+    @Override
+    public void onBookingCreated(){
+        System.out.println("[CREATE]: Booking created successfully");
+    }
+    @Override
+    public void onBookingEdited(){
+        System.out.println("[EDIT]: Booking edited successfully");
+    }
+    @Override
+    public void onBookingDeleted(){
+        System.out.println("[DELETE]: Booking deleted successfully");
+    }
 }
