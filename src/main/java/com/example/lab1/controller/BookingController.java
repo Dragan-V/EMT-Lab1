@@ -1,5 +1,8 @@
 package com.example.lab1.controller;
 
+import com.example.lab1.events.BookingCreatedEvent;
+import com.example.lab1.events.BookingDeletedEvent;
+import com.example.lab1.events.BookingEditedEvent;
 import com.example.lab1.model.Booking;
 import com.example.lab1.model.Category;
 import com.example.lab1.model.Host;
@@ -7,6 +10,7 @@ import com.example.lab1.model.dto.BookingDto;
 import com.example.lab1.service.BookingService;
 import com.example.lab1.service.HostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +25,13 @@ public class BookingController {
     private final BookingService bookingService;
     private final HostService hostService;
 
+    private final ApplicationEventPublisher applicationEventPublisher;
+
     @Autowired
-    public BookingController(BookingService bookingService, HostService hostService) {
+    public BookingController(BookingService bookingService, HostService hostService, ApplicationEventPublisher applicationEventPublisher) {
         this.bookingService = bookingService;
         this.hostService = hostService;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
     @GetMapping("/bookings")
     public ResponseEntity<List<Booking>> listAll() {
@@ -57,7 +64,7 @@ public class BookingController {
             return ResponseEntity.notFound().build();
         }
 
-        this.bookingService.create(bookingDto.getName(), bookingDto.getCategory(), bookingDto.getHost(), bookingDto.getNumRooms());
+        this.applicationEventPublisher.publishEvent(new BookingCreatedEvent(this.bookingService.create(bookingDto.getName(), bookingDto.getCategory(), bookingDto.getHost(), bookingDto.getNumRooms())));
         return ResponseEntity.ok().build();
     }
     @CrossOrigin(origins = "http://localhost:3000")
@@ -66,7 +73,7 @@ public class BookingController {
         if(id == null) {
             return ResponseEntity.notFound().build();
         }
-
+        this.applicationEventPublisher.publishEvent(new BookingDeletedEvent(id));
         this.bookingService.deleteById(id);
         return ResponseEntity.ok().build();
     }
@@ -77,8 +84,28 @@ public class BookingController {
         }
 
         this.bookingService.update(id, bookingDto.getName(), bookingDto.getCategory(), bookingDto.getHost(), bookingDto.getNumRooms());
+        this.applicationEventPublisher.publishEvent(new BookingEditedEvent(id));
         return ResponseEntity.ok().build();
     }
 
 }
 
+//{
+//        "name": "United States",
+//        "continent": "North America"
+//        }
+//
+//        {
+//        "name":"Petar",
+//        "surname":"Petrovski",
+//        "countryId":"1"
+//        }
+//
+//        {
+//        "name": "Booking Name",
+//        "category": "ROOM",
+//        "host": {
+//        "id": 1
+//        },
+//        "numRooms": 3
+//        }
