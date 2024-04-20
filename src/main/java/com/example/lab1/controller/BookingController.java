@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/booking")
 public class BookingController {
 
@@ -25,14 +26,26 @@ public class BookingController {
         this.bookingService = bookingService;
         this.hostService = hostService;
     }
-
     @GetMapping("/bookings")
     public ResponseEntity<List<Booking>> listAll() {
         List<Booking> bookings = bookingService.listAll();
+        System.out.println("hi");
         return ResponseEntity.ok(bookings);
     }
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("/bookings/{id}")
+    public ResponseEntity<Booking> getBookingById(@PathVariable Long id) {
+        Booking booking = bookingService.findById(id);
+        if (booking == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(booking);
+    }
 
-
+    @GetMapping("/categories")
+    public ResponseEntity<Category[]> getCategories() {
+        return ResponseEntity.ok(Category.values());
+    }
 
     @PostMapping("/add-booking")
     public ResponseEntity<Void> addBooking(@RequestBody BookingDto bookingDto) {
@@ -47,7 +60,7 @@ public class BookingController {
         this.bookingService.create(bookingDto.getName(), bookingDto.getCategory(), bookingDto.getHost(), bookingDto.getNumRooms());
         return ResponseEntity.ok().build();
     }
-
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/delete-booking/{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable Long id) {
         if(id == null) {
