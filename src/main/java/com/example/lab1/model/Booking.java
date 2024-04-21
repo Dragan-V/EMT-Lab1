@@ -13,7 +13,7 @@ public class Booking {
     private String name;
     @Enumerated(EnumType.STRING)
     private Category category;
-    @OneToOne
+    @ManyToOne
     private Host host;
     private Integer numRooms;
 
