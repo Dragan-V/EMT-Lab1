@@ -36,7 +36,7 @@ public class BookingController {
     @GetMapping("/bookings")
     public ResponseEntity<List<Booking>> listAll() {
         List<Booking> bookings = bookingService.listAll();
-        System.out.println("hi");
+
         return ResponseEntity.ok(bookings);
     }
     @CrossOrigin(origins = "http://localhost:3000")
@@ -85,6 +85,11 @@ public class BookingController {
 
         this.bookingService.update(id, bookingDto.getName(), bookingDto.getCategory(), bookingDto.getHost(), bookingDto.getNumRooms());
         this.applicationEventPublisher.publishEvent(new BookingEditedEvent(id));
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/rent/{id}")
+    public ResponseEntity<Void> rentRoom(@PathVariable Long id){
+        this.bookingService.rent(id);
         return ResponseEntity.ok().build();
     }
 

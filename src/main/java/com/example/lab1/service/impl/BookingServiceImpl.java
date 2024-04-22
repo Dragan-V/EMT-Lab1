@@ -14,6 +14,17 @@ public class BookingServiceImpl implements BookingService {
 
     private final BookingsRepository bookingsRepository;
 
+    @Override
+    public void rent(Long id) {
+        Booking booking = bookingsRepository.findById(id).orElseThrow();
+        booking.setNumRooms(booking.getNumRooms()-1);
+        bookingsRepository.save(booking);
+        if(booking.getNumRooms()==0){
+            this.bookingsRepository.deleteById(id);
+        }
+
+    }
+
     public BookingServiceImpl(BookingsRepository bookingsRepository) {
         this.bookingsRepository = bookingsRepository;
     }
